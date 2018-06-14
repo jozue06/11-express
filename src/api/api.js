@@ -30,6 +30,16 @@ let serverError = (res,err) => {
   res.end();
 };
 
+
+let idError = (res,err) => {
+  let error = { error:err };
+  res.statusCode = 404;
+  res.statusMessage = 'Not Found';
+  res.setHeader('Content-Type', 'application/json');
+  res.write(JSON.stringify(error) );
+  res.end();
+};
+
 router.get('/', (req,res) => {
   res.statusCode = 200;
   res.statusMessage = 'OKt';
@@ -38,10 +48,17 @@ router.get('/', (req,res) => {
 });
 
 router.get('/api/v1/notes', (req,res) => {
-  if ( req.query.id ) {
+  if ( !req.query.id ) {
+    res.statusCode = 400;
+    res.statusMessage = 'Bad Request';
+    res.write('Bad Request');
+    res.end();
+  }
+
+  else if ( req.query.id ) {
     Notes.findOne(req.query.id)
       .then( data => sendJSON(res,data) )
-      .catch( err => serverError(res,err) );
+      .catch( err => idError(res,err) );
   }
   else {
     Notes.fetchAll()
@@ -61,7 +78,7 @@ router.delete('/api/v1/notes', (req,res) => {
 });
 
 router.post('/api/v1/notes', (req,res) => {
-  if (!req.body){
+  if (!req.body.content ){
     res.statusCode = 400;
     res.statusMessage = 'Bad Request';
     res.write('Bad Request');
