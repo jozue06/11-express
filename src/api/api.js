@@ -1,7 +1,7 @@
 'use strict';
 
 import express from 'express';
-import {Notes, findOne, fetchAll, deleteOne} from '../models/notes.js';
+import Notes from '../models/notes.js';
 
 const router = express.Router();
 
@@ -9,7 +9,15 @@ let sendJSON = (res,data) => {
   res.statusCode = 200;
   res.statusMessage = 'OK';
   res.setHeader('Content-Type', 'application/json');
-  res.write( JSON.stringify(data) );
+  res.write(JSON.stringify(data));
+  res.end();
+};
+
+let sendJSONDelete = (res,data) => {
+  res.statusCode = 204;
+  res.statusMessage = 'OK';
+  res.setHeader('Content-Type', 'application/json');
+  res.write(JSON.stringify(data));
   res.end();
 };
 
@@ -24,12 +32,12 @@ let serverError = (res,err) => {
 
 router.get('/api/v1/notes', (req,res) => {
   if ( req.query.id ) {
-    findOne(req.query.id)
+    Notes.findOne(req.query.id)
       .then( data => sendJSON(res,data) )
       .catch( err => serverError(res,err) );
   }
   else {
-    fetchAll()
+    Notes.fetchAll()
       .then( data => sendJSON(res,data) )
       .catch( err => serverError(res,err) );
   }
@@ -37,10 +45,10 @@ router.get('/api/v1/notes', (req,res) => {
 
 router.delete('/api/v1/notes', (req,res) => {
   if ( req.query.id ) {
-    deleteOne(req.query.id)
+    Notes.deleteOne(req.query.id)
       .then( success => {
         let data = {id:req.query.id,deleted:success};
-        sendJSON(res,data);
+        sendJSONDelete(res,data);
       });
   }
 });

@@ -54,12 +54,12 @@
 #### Server Endpoints
 * **`/api/vi/resource-name`**
 * `POST` request
- * pass data as stringifed JSON in the body of a **POST** request to create a new resource
+ * pass data as stringifed JSON in the body of a **POST** request to create a new resource [ X ]
 * `GET` request
- * pass `/:id` as a route parameter to **GET** a specific resource (as JSON)
+ * pass `/:id` as a route parameter to **GET** a specific resource (as JSON) [ X ]
 * `DELETE` request
- * pass `/:id` as a route parameter to **DELETE** a specific resource (as JSON)
- * this should return a 204 status code with no content in the body
+ * pass `/:id` as a route parameter to **DELETE** a specific resource (as JSON) [ X ]
+ * this should return a 204 status code with no content in the body [ X ]
 
 #### Tests
 * write a test to ensure that your api returns a status code of 404 for routes that have not been registered
