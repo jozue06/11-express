@@ -1,13 +1,10 @@
 'use strict';
 
-const router = require('../lib/router.js');
-const Notes = require('../models/notes.js');
+import express from 'express';
+import {Notes, findOne, fetchAll, deleteOne} from '../models/notes.js';
 
-/**
- * Simple method to send a JSON response (all of the API methods will use this)
- * @param res
- * @param data
- */
+const router = express.Router();
+
 let sendJSON = (res,data) => {
   res.statusCode = 200;
   res.statusMessage = 'OK';
@@ -27,12 +24,12 @@ let serverError = (res,err) => {
 
 router.get('/api/v1/notes', (req,res) => {
   if ( req.query.id ) {
-    Notes.findOne(req.query.id)
+    findOne(req.query.id)
       .then( data => sendJSON(res,data) )
       .catch( err => serverError(res,err) );
   }
   else {
-    Notes.fetchAll()
+    fetchAll()
       .then( data => sendJSON(res,data) )
       .catch( err => serverError(res,err) );
   }
@@ -40,11 +37,11 @@ router.get('/api/v1/notes', (req,res) => {
 
 router.delete('/api/v1/notes', (req,res) => {
   if ( req.query.id ) {
-    Notes.deleteOne(req.query.id)
+    deleteOne(req.query.id)
       .then( success => {
         let data = {id:req.query.id,deleted:success};
         sendJSON(res,data);
-      })
+      });
   }
 });
 
@@ -57,4 +54,4 @@ router.post('/api/v1/notes', (req,res) => {
 
 });
 
-module.exports = {};
+export default router;
