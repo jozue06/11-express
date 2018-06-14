@@ -43,7 +43,7 @@ describe('app',() =>{
         return superagent
           .get(`http://localhost:3300/api/v1/notes?id=${returns}`)
           .then(data => {
-            // console.log(data.body.id);
+            console.log(data.body);
             // console.log(returns);
             expect(data.body.id).toEqual(returns);
           } )

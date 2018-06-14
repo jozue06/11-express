@@ -30,6 +30,13 @@ let serverError = (res,err) => {
   res.end();
 };
 
+router.get('/', (req,res) => {
+  res.statusCode = 200;
+  res.statusMessage = 'OKt';
+  res.write('Welcome');
+  res.end();
+});
+
 router.get('/api/v1/notes', (req,res) => {
   if ( req.query.id ) {
     Notes.findOne(req.query.id)
@@ -54,7 +61,7 @@ router.delete('/api/v1/notes', (req,res) => {
 });
 
 router.post('/api/v1/notes', (req,res) => {
-  if (!req.body.id){
+  if (!req.body){
     res.statusCode = 400;
     res.statusMessage = 'Bad Request';
     res.write('Bad Request');
