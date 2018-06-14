@@ -10,10 +10,12 @@ app.use(api);
 
 let isRunning = false;
 
+let server;
+
 module.exports = {
   start: (port) => {
     if(! isRunning) {
-      app.listen(port, (err) => {
+      server = app.listen(port, (err) => {
         if(err) { throw err; }
         isRunning = true;
         console.log('Server is up on port', port);
@@ -25,9 +27,10 @@ module.exports = {
   },
 
   stop: () => {
-    app.close( () => {
+    server.close( () => {
       isRunning = false;
       console.log('Server has been stopped');
     });
   },
 };
+

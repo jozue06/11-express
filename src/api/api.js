@@ -26,7 +26,7 @@ let serverError = (res,err) => {
   res.statusCode = 500;
   res.statusMessage = 'Server Error';
   res.setHeader('Content-Type', 'application/json');
-  res.write( JSON.stringify(error) );
+  res.write(JSON.stringify(error) );
   res.end();
 };
 
@@ -54,12 +54,19 @@ router.delete('/api/v1/notes', (req,res) => {
 });
 
 router.post('/api/v1/notes', (req,res) => {
+  if (!req.body.id){
+    res.statusCode = 400;
+    res.statusMessage = 'Bad Request';
+    res.write('Bad Request');
+    res.end();
+  }
+  else {
+    let record = new Notes(req.body);
+    record.save()
+      .then(data => sendJSON(res,data))
+      .catch(console.error);
 
-  let record = new Notes(req.body);
-  record.save()
-    .then(data => sendJSON(res,data))
-    .catch(console.error);
-
+  }
 });
 
 export default router;
